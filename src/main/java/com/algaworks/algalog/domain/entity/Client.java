@@ -1,4 +1,4 @@
-package com.algaworks.algalog.domain.model;
+package com.algaworks.algalog.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,6 +12,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(name = "EMAIL")
     private String email;
     private String fone;
 }
