@@ -4,20 +4,21 @@ import com.algaworks.algalog.domain.dto.ClientDTO;
 import com.algaworks.algalog.domain.dto.UpdateClientDTO;
 import com.algaworks.algalog.domain.entity.Client;
 import com.algaworks.algalog.domain.reposiotry.ClientRepository;
-import jakarta.transaction.Transactional;
+import com.algaworks.algalog.domain.service.ClientService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
-    @Autowired
     private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -27,31 +28,26 @@ public class ClientController {
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Client find(@PathVariable Long id) {
-        return clientRepository.getReferenceById(id);
+    public ResponseEntity<Client> findClientById(@PathVariable Long id) {
+        return clientRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    public Client save(@RequestBody @Valid ClientDTO clientDTO) {
-        var client = new Client(null, clientDTO.name(), clientDTO.email(), clientDTO.fone());
-        clientRepository.save(client);
-        return client;
+    public Client saveNewClient(@RequestBody @Valid ClientDTO clientDTO) {
+        return clientService.save(new Client(null, clientDTO.name(), clientDTO.email(), clientDTO.fone()));
     }
 
     @PutMapping("{id}")
-    @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long id, @RequestBody UpdateClientDTO updateClientDTO) {
+    public void updateClientById(@PathVariable Long id, @RequestBody @Valid UpdateClientDTO updateClientDTO) {
         var client = clientRepository.getReferenceById(id);
         client.update(updateClientDTO);
     }
 
     @DeleteMapping("{id}")
-    @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        clientRepository.deleteById(id);
+    public void deleteClientById(@PathVariable Long id) {
+        clientService.delete(id);
     }
 }
