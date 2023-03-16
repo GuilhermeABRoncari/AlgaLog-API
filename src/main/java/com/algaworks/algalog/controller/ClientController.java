@@ -35,14 +35,13 @@ public class ClientController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Client saveNewClient(@RequestBody @Valid ClientDTO clientDTO) {
-        return clientService.save(new Client(null, clientDTO.name(), clientDTO.email(), clientDTO.fone()));
+        return clientService.save(clientDTO);
     }
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateClientById(@PathVariable Long id, @RequestBody @Valid UpdateClientDTO updateClientDTO) {
-        var client = clientRepository.getReferenceById(id);
-        client.update(updateClientDTO);
+        clientService.update(id, updateClientDTO);
     }
 
     @DeleteMapping("{id}")
