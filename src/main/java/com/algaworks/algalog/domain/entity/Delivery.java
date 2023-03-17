@@ -1,14 +1,14 @@
 package com.algaworks.algalog.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity(name = "Delivery")
 @Table(name = "deliverys")
@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +31,8 @@ public class Delivery {
     @Column(name = "status")
     private StatusDelivery statusDelivery;
     @Column(name = "orderdate")
-    private LocalDateTime orderDate;
+    private OffsetDateTime orderDate;
     @Column(name = "finisheddate")
-    private LocalDateTime finishedDate;
+    private OffsetDateTime finishedDate;
 
 }

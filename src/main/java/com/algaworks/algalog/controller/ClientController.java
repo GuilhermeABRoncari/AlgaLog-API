@@ -4,11 +4,11 @@ import com.algaworks.algalog.domain.dto.ClientDTO;
 import com.algaworks.algalog.domain.dto.UpdateClientDTO;
 import com.algaworks.algalog.domain.entity.Client;
 import com.algaworks.algalog.domain.reposiotry.ClientRepository;
+import com.algaworks.algalog.domain.response.ClientResponse;
 import com.algaworks.algalog.domain.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,14 +27,13 @@ public class ClientController {
     }
 
     @GetMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Client> findClientById(@PathVariable Long id) {
-        return clientRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ClientResponse findClientById(@PathVariable Long id) {
+        return clientService.find(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Client saveNewClient(@RequestBody @Valid ClientDTO clientDTO) {
+    public ClientResponse saveNewClient(@RequestBody @Valid ClientDTO clientDTO) {
         return clientService.save(clientDTO);
     }
 

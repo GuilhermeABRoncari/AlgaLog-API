@@ -1,7 +1,7 @@
 package com.algaworks.algalog.exceptionhandler;
 
 import com.algaworks.algalog.domain.exception.EmailUsedExecption;
-import com.algaworks.algalog.domain.exception.InvalidClientException;
+import com.algaworks.algalog.domain.exception.InvalidIdException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         ErrorProblem error = new ErrorProblem();
         error.setStatus(status.value());
-        error.setDateTime(LocalDateTime.now());
+        error.setDateTime(OffsetDateTime.now());
         error.setTitle("One or more mandatory fields are invalids. Try again.");
         error.setFields(errorField);
 
@@ -54,8 +55,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity emailInUse(EmailUsedExecption ex){
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
-    @ExceptionHandler(InvalidClientException.class)
-    public ResponseEntity invalidClientID(InvalidClientException ex){
+    @ExceptionHandler(InvalidIdException.class)
+    public ResponseEntity invalidClientID(InvalidIdException ex){
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

@@ -3,14 +3,18 @@ package com.algaworks.algalog.domain.service;
 import com.algaworks.algalog.domain.dto.DeliveryDTO;
 import com.algaworks.algalog.domain.entity.Delivery;
 import com.algaworks.algalog.domain.entity.StatusDelivery;
-import com.algaworks.algalog.domain.exception.InvalidClientException;
+import com.algaworks.algalog.domain.exception.InvalidIdException;
 import com.algaworks.algalog.domain.reposiotry.ClientRepository;
 import com.algaworks.algalog.domain.reposiotry.DeliveryRepository;
+import com.algaworks.algalog.domain.response.DeliveryResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @Service
@@ -26,10 +30,21 @@ public class DeliveryService {
                     clientRepository.getReferenceById(deliveryDTO.client_id()),
                     deliveryDTO.recipient(), deliveryDTO.rate(),
                     StatusDelivery.PENDING,
-                    LocalDateTime.now(),
+                    OffsetDateTime.now(),
                     null);
 
             return deliveryRepository.save(delivery);
-        }else throw new InvalidClientException("Client not found.");
+        } else throw new InvalidIdException("Client not found.");
+    }
+
+    public ResponseEntity<DeliveryResponse> find(Long id) {
+        return ResponseEntity.ok(deliveryRepository.findById(id)
+                .map(delivery -> new DeliveryResponse(delivery)).orElseThrow(() -> new InvalidIdException("Delivery not found.")));
+    }
+
+    public Page<DeliveryResponse> page(Pageable pageable) {
+        Page<Delivery> all = deliveryRepository.findAll(pageable);
+        Page<DeliveryResponse> page = all.map(delivery -> new DeliveryResponse(delivery));
+        return page;
     }
 }
