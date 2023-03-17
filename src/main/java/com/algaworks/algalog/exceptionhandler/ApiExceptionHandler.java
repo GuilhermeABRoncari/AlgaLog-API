@@ -1,5 +1,7 @@
 package com.algaworks.algalog.exceptionhandler;
 
+import com.algaworks.algalog.domain.exception.EmailUsedExecption;
+import com.algaworks.algalog.domain.exception.InvalidClientException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -47,5 +49,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity clientNotFound() {
         return ResponseEntity.notFound().build();
+    }
+    @ExceptionHandler(EmailUsedExecption.class)
+    public ResponseEntity emailInUse(EmailUsedExecption ex){
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+    @ExceptionHandler(InvalidClientException.class)
+    public ResponseEntity invalidClientID(InvalidClientException ex){
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }
