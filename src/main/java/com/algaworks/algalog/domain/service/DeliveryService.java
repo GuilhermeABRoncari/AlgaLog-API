@@ -2,6 +2,7 @@ package com.algaworks.algalog.domain.service;
 
 import com.algaworks.algalog.domain.dto.DeliveryDTO;
 import com.algaworks.algalog.domain.entity.Delivery;
+import com.algaworks.algalog.domain.entity.Occurrence;
 import com.algaworks.algalog.domain.entity.StatusDelivery;
 import com.algaworks.algalog.domain.exception.InvalidIdException;
 import com.algaworks.algalog.domain.reposiotry.ClientRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -28,6 +30,7 @@ public class DeliveryService {
 
             Delivery delivery = new Delivery(null,
                     clientRepository.getReferenceById(deliveryDTO.client_id()),
+                    (List<Occurrence>) new Occurrence(),
                     deliveryDTO.recipient(), deliveryDTO.rate(),
                     StatusDelivery.PENDING,
                     OffsetDateTime.now(),

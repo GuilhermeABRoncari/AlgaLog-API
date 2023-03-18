@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+
 @Entity(name = "Client")
 @Table(name = "clients")
 @Data
@@ -24,8 +25,10 @@ public class Client {
     private String fone;
 
     public void update(UpdateClientDTO updateClientDTO) {
-        if(updateClientDTO.name() != null) this.name = updateClientDTO.name();
-        if(updateClientDTO.email() != null) this.email = updateClientDTO.email();
-        if(updateClientDTO.fone() != null) this.fone = updateClientDTO.fone();
+        if (updateClientDTO.name() != null) this.name = updateClientDTO.name();
+        if (updateClientDTO.email() != null) this.email = updateClientDTO.email();
+        if (updateClientDTO.fone() != null) this.fone = updateClientDTO.fone();
     }
 }
+
+

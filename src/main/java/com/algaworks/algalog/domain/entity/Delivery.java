@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Delivery")
 @Table(name = "deliverys")
@@ -24,6 +26,8 @@ public class Delivery {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+    @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
+    private List<Occurrence> occurrenceList = new ArrayList<>();
     @Embedded
     private Recipient recipient;
     private BigDecimal rate;
@@ -35,4 +39,12 @@ public class Delivery {
     @Column(name = "finisheddate")
     private OffsetDateTime finishedDate;
 
+    public Occurrence addOccurrence(String description) {
+        Occurrence occurrence = new Occurrence();
+        occurrence.setDelivery(this);
+        occurrence.setDescription(description);
+        occurrence.setRegistrationDate(OffsetDateTime.now());
+        this.getOccurrenceList().add(occurrence);
+        return occurrence;
+    }
 }
