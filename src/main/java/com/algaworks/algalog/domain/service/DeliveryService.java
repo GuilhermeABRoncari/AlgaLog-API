@@ -4,7 +4,9 @@ import com.algaworks.algalog.domain.dto.DeliveryDTO;
 import com.algaworks.algalog.domain.entity.Delivery;
 import com.algaworks.algalog.domain.entity.Occurrence;
 import com.algaworks.algalog.domain.entity.StatusDelivery;
+import com.algaworks.algalog.domain.exception.BusinessRuleException;
 import com.algaworks.algalog.domain.exception.InvalidIdException;
+import com.algaworks.algalog.domain.exception.NotFoundIdException;
 import com.algaworks.algalog.domain.reposiotry.ClientRepository;
 import com.algaworks.algalog.domain.reposiotry.DeliveryRepository;
 import com.algaworks.algalog.domain.response.DeliveryResponse;
@@ -49,5 +51,11 @@ public class DeliveryService {
         Page<Delivery> all = deliveryRepository.findAll(pageable);
         Page<DeliveryResponse> page = all.map(delivery -> new DeliveryResponse(delivery));
         return page;
+    }
+    @Transactional
+    public void finish(Long id){
+        if(deliveryRepository.existsById(id)) {
+            deliveryRepository.getReferenceById(id).finish();
+        }else throw new NotFoundIdException("Delivery not found.");
     }
 }

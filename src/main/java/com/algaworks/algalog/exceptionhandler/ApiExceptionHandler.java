@@ -1,5 +1,6 @@
 package com.algaworks.algalog.exceptionhandler;
 
+import com.algaworks.algalog.domain.exception.BusinessRuleException;
 import com.algaworks.algalog.domain.exception.EmailUsedExecption;
 import com.algaworks.algalog.domain.exception.InvalidIdException;
 import com.algaworks.algalog.domain.exception.NotFoundIdException;
@@ -65,5 +66,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NotFoundIdException.class)
     public ResponseEntity notFoundId(NotFoundIdException ex) {
         return ResponseEntity.notFound().build();
+    }
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity businessRule(BusinessRuleException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

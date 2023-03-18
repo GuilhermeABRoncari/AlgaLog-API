@@ -35,4 +35,9 @@ public class DeliveryController {
     public ResponseEntity<DeliveryResponse> findById(@PathVariable Long id) {
         return deliveryService.find(id);
     }
+    @PutMapping("{id}/finish")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finish(@PathVariable Long id) {
+        deliveryService.finish(id);
+    }
 }

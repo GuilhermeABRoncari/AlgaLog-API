@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("deliverys/{delivery_id}/occurrences")
@@ -18,6 +20,10 @@ public class OccurrenceController {
     @ResponseStatus(HttpStatus.CREATED)
     public OccurrenceResponse register(@PathVariable Long delivery_id, @RequestBody @Valid OccurrenceDTO occurrenceDTO) {
         return occurrenceService.register(delivery_id, occurrenceDTO.description());
+    }
+    @GetMapping
+    public List<OccurrenceResponse> list(@PathVariable Long delivery_id) {
+        return occurrenceService.list(delivery_id);
     }
 }
 

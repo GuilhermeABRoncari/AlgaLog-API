@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.entity;
 
+import com.algaworks.algalog.domain.exception.BusinessRuleException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,5 +47,13 @@ public class Delivery {
         occurrence.setRegistrationDate(OffsetDateTime.now());
         this.getOccurrenceList().add(occurrence);
         return occurrence;
+    }
+
+    public void finish() {
+        if(this.statusDelivery.equals(statusDelivery.FINISHED)) throw new BusinessRuleException("This delivery is already finished.");
+        if(!statusDelivery.PENDING.equals(this.statusDelivery)) throw new BusinessRuleException("Delivery cannot be completed.");
+
+        setStatusDelivery(statusDelivery.FINISHED);
+        setFinishedDate(OffsetDateTime.now());
     }
 }
